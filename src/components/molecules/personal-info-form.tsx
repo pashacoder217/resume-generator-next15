@@ -2,18 +2,20 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/molecules/rich-text-editor";
 import { useResumeStore } from "@/lib/store";
-import type React from "react"; // Added import for React
+import type React from "react";
 
 export function PersonalInfoForm() {
   const { personalInfo, updatePersonalInfo } = useResumeStore();
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     updatePersonalInfo({ ...personalInfo, [name]: value });
+  };
+
+  const handleBioChange = (content: string) => {
+    updatePersonalInfo({ ...personalInfo, bio: content });
   };
 
   return (
@@ -90,14 +92,7 @@ export function PersonalInfoForm() {
 
       <div className="space-y-2">
         <Label htmlFor="bio">Professional Summary</Label>
-        <Textarea
-          id="bio"
-          name="bio"
-          placeholder="Write a brief professional summary..."
-          className="min-h-[100px]"
-          value={personalInfo.bio}
-          onChange={handleChange}
-        />
+        <RichTextEditor content={personalInfo.bio} onChange={handleBioChange} />
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import { PlusCircle, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/molecules/rich-text-editor";
 import { useResumeStore } from "@/lib/store";
 
 export function WorkExperienceForm() {
@@ -13,7 +13,7 @@ export function WorkExperienceForm() {
   const addExperience = () => {
     updateWorkExperiences([
       ...workExperiences,
-      { company: "", role: "", duration: "", description: "" },
+      { company: "", role: "", duration: "", description: "<p></p>" },
     ]);
   };
 
@@ -89,14 +89,11 @@ export function WorkExperienceForm() {
 
           <div className="space-y-2">
             <Label htmlFor={`description-${index}`}>Description</Label>
-            <Textarea
-              id={`description-${index}`}
-              value={experience.description}
-              onChange={(e) =>
-                updateExperience(index, "description", e.target.value)
+            <RichTextEditor
+              content={experience.description}
+              onChange={(content) =>
+                updateExperience(index, "description", content)
               }
-              placeholder="Describe your responsibilities and achievements..."
-              className="min-h-[100px]"
             />
           </div>
         </div>

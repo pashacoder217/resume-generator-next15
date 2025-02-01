@@ -1,6 +1,5 @@
 "use client";
 
-import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { PersonalInfoForm } from "@/components/molecules/personal-info-form";
@@ -26,6 +25,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import dynamic from "next/dynamic";
+
+const PDFDownloadLink = dynamic(
+  async () => await import("@/components/lib/react-pdf-link"),
+  { ssr: false }
+);
+const PDFViewer = dynamic(
+  async () => await import("@/components/lib/react-pdf-viewer"),
+  { ssr: false }
+);
 
 export default function ResumePage() {
   const [isPdfPreviewOpen, setIsPdfPreviewOpen] = useState(false);
@@ -128,19 +137,23 @@ export default function ResumePage() {
               Preview PDF
             </Button>
 
-            <PDFDownloadLink
-              document={resumePDF}
-              fileName={`${personalInfo.name
-                .toLowerCase()
-                .replace(/\s+/g, "-")}-resume.pdf`}
-            >
-              {({ loading }) => (
-                <Button disabled={loading}>
-                  <Download className="mr-2 h-4 w-4" />
-                  {loading ? "Generating PDF..." : "Download Resume"}
-                </Button>
-              )}
-            </PDFDownloadLink>
+            {typeof window !== "undefined" && (
+              <PDFDownloadLink
+                document={resumePDF}
+                fileName={`${personalInfo.name
+                  .toLowerCase()
+                  .replace(/\s+/g, "-")}-resume.pdf`}
+              >
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/* @ts-expect-error */}
+                {({ loading }) => (
+                  <Button disabled={loading}>
+                    <Download className="mr-2 h-4 w-4" />
+                    {loading ? "Generating PDF..." : "Download Resume"}
+                  </Button>
+                )}
+              </PDFDownloadLink>
+            )}
           </div>
         </div>
 
@@ -160,9 +173,11 @@ export default function ResumePage() {
 
       <Dialog open={isPdfPreviewOpen} onOpenChange={setIsPdfPreviewOpen}>
         <DialogContent className="max-w-screen-lg h-[800px]">
-          <PDFViewer width="100%" height="100%" className="rounded-lg">
-            {resumePDF}
-          </PDFViewer>
+          {typeof window !== "undefined" && (
+            <PDFViewer width="100%" height="100%" className="rounded-lg">
+              {resumePDF}
+            </PDFViewer>
+          )}
         </DialogContent>
       </Dialog>
     </main>

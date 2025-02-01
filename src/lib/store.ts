@@ -1,5 +1,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import {
+  validateString,
+  validateHTML,
+  validateArray,
+  validateObject,
+} from "@/lib/utils";
 
 export type TemplateType = "modern" | "professional" | "minimal";
 
@@ -10,14 +16,14 @@ interface PersonalInfo {
   phone: string;
   linkedin: string;
   github: string;
-  bio: string;
+  bio: string; // This will now contain HTML
 }
 
 interface WorkExperience {
   company: string;
   role: string;
   duration: string;
-  description: string;
+  description: string; // This will now contain HTML
 }
 
 interface Education {
@@ -48,7 +54,7 @@ const initialState = {
     phone: "",
     linkedin: "",
     github: "",
-    bio: "",
+    bio: "<p></p>",
   },
   workExperiences: [],
   skills: [],
@@ -60,16 +66,52 @@ export const useResumeStore = create<ResumeStore>()(
   persist(
     (set) => ({
       ...initialState,
-      updatePersonalInfo: (info) => set({ personalInfo: info }),
-      updateWorkExperiences: (experiences) =>
-        set({ workExperiences: experiences }),
-      updateSkills: (skills) => set({ skills: skills }),
-      updateEducation: (education) => set({ education: education }),
-      updateTemplate: (template) => set({ selectedTemplate: template }),
+      updatePersonalInfo: (info) => {
+        const validatedInfo = {
+          ...validateObject(info, initialState.personalInfo),
+          bio: validateHTML(info.bio),
+        };
+        set({ personalInfo: validatedInfo });
+      },
+      updateWorkExperiences: (experiences) => {
+        const validatedExperiences = validateArray(experiences).map((exp) => ({
+          ...exp,
+          description: validateHTML(exp.description),
+        }));
+        set({ workExperiences: validatedExperiences });
+      },
+      updateSkills: (skills) => set({ skills: validateArray(skills) }),
+      updateEducation: (education) =>
+        set({ education: validateArray(education) }),
+      updateTemplate: (template) =>
+        set({
+          selectedTemplate:
+            (validateString(template) as TemplateType) ||
+            initialState.selectedTemplate,
+        }),
       resetStore: () => set(initialState),
     }),
     {
       name: "resume-storage",
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state.personalInfo = {
+            ...validateObject(state.personalInfo, initialState.personalInfo),
+            bio: validateHTML(state.personalInfo.bio),
+          };
+          state.workExperiences = validateArray(state.workExperiences).map(
+            (exp) => ({
+              ...exp,
+              description: validateHTML(exp.description),
+            })
+          );
+          state.skills = validateArray(state.skills);
+          state.education = validateArray(state.education);
+          state.selectedTemplate =
+            (validateString(state.selectedTemplate) as TemplateType) ||
+            initialState.selectedTemplate;
+        }
+      },
     }
   )
 );

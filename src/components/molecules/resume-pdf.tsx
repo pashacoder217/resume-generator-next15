@@ -25,6 +25,22 @@ interface ResumeProps {
   }[];
 }
 
+// Convert HTML to plain text with basic formatting
+const htmlToText = (html: string) => {
+  // Remove HTML tags but preserve line breaks
+  const text = html
+    .replace(/<p>/g, "")
+    .replace(/<\/p>/g, "\n")
+    .replace(/<br\s*\/?>/g, "\n")
+    .replace(/<li>/g, "• ")
+    .replace(/<\/li>/g, "\n")
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .trim();
+
+  return text;
+};
+
 const modernStyles = StyleSheet.create({
   page: {
     padding: 30,
@@ -247,7 +263,9 @@ export function ResumePDF({
         {personalInfo.bio && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Professional Summary</Text>
-            <Text style={styles.description}>{personalInfo.bio}</Text>
+            <Text style={styles.description}>
+              {htmlToText(personalInfo.bio)}
+            </Text>
           </View>
         )}
 
@@ -259,7 +277,9 @@ export function ResumePDF({
                 <Text style={styles.company}>{exp.company}</Text>
                 <Text style={styles.role}>{exp.role}</Text>
                 <Text style={styles.duration}>{exp.duration}</Text>
-                <Text style={styles.description}>{exp.description}</Text>
+                <Text style={styles.description}>
+                  {htmlToText(exp.description)}
+                </Text>
               </View>
             ))}
           </View>
@@ -273,6 +293,8 @@ export function ResumePDF({
                 <Text key={index} style={styles.skill}>
                   {skill}
                   {index < skills.length - 1 && (
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-expect-error
                     <Text style={styles.bullet}>•</Text>
                   )}
                 </Text>
