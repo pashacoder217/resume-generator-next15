@@ -14,6 +14,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { FileText, Download, RotateCcw } from "lucide-react";
 import { useState } from "react";
 import { useResumeStore } from "@/lib/store";
+import { TemplateSelector } from "@/components/molecules/template-selector";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -75,6 +76,20 @@ export default function ResumePage() {
           <ThemeToggle />
         </div>
       </div>
+
+      <Card className="mb-6">
+        <CardContent className="pt-6">
+          <div className="space-y-2">
+            <h2 className="text-lg font-medium">Choose a Template</h2>
+            <p className="text-sm text-muted-foreground">
+              Select a template that best suits your professional needs
+            </p>
+          </div>
+          <div className="mt-4">
+            <TemplateSelector />
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-6">

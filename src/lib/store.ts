@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+export type TemplateType = "modern" | "professional" | "minimal";
+
 interface PersonalInfo {
   name: string;
   role: string;
@@ -29,10 +31,12 @@ interface ResumeStore {
   workExperiences: WorkExperience[];
   skills: string[];
   education: Education[];
+  selectedTemplate: TemplateType;
   updatePersonalInfo: (info: PersonalInfo) => void;
   updateWorkExperiences: (experiences: WorkExperience[]) => void;
   updateSkills: (skills: string[]) => void;
   updateEducation: (education: Education[]) => void;
+  updateTemplate: (template: TemplateType) => void;
   resetStore: () => void;
 }
 
@@ -49,6 +53,7 @@ const initialState = {
   workExperiences: [],
   skills: [],
   education: [],
+  selectedTemplate: "modern" as TemplateType,
 };
 
 export const useResumeStore = create<ResumeStore>()(
@@ -60,6 +65,7 @@ export const useResumeStore = create<ResumeStore>()(
         set({ workExperiences: experiences }),
       updateSkills: (skills) => set({ skills: skills }),
       updateEducation: (education) => set({ education: education }),
+      updateTemplate: (template) => set({ selectedTemplate: template }),
       resetStore: () => set(initialState),
     }),
     {
