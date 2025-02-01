@@ -3,6 +3,7 @@
 A modern, user-friendly resume generator built with Next.js 15 that creates ATS-friendly resumes. Features a live preview and easy PDF download functionality.
 
 ![Resume Generator Demo](/public/image.png)
+![Resume Generator Demo](/public/image-dark.png)
 
 ## Features
 

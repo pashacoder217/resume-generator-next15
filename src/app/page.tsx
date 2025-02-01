@@ -10,6 +10,7 @@ import { SkillsEducationForm } from "@/components/molecules/skills-education-for
 import { ResumePDF } from "@/components/molecules/resume-pdf";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResumePreview } from "@/components/molecules/resume-preview";
+import { ThemeToggle } from "@/components/molecules/theme-toggle";
 
 interface WorkExperience {
   company: string;
@@ -40,11 +41,14 @@ export default function ResumePage() {
 
   return (
     <main className="container mx-auto py-6 px-4 md:px-6">
-      <div className="mb-6 space-y-2 text-center">
-        <h1 className="text-3xl font-bold">Resume Generator</h1>
-        <p className="text-muted-foreground">
-          Create an ATS-friendly resume in minutes
-        </p>
+      <div className="mb-6 flex items-center justify-between">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold">Resume Generator</h1>
+          <p className="text-muted-foreground">
+            Create an ATS-friendly resume in minutes
+          </p>
+        </div>
+        <ThemeToggle />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -113,7 +117,7 @@ export default function ResumePage() {
         </div>
 
         <div className="lg:sticky lg:top-6 lg:h-[calc(100vh-8rem)] lg:overflow-auto">
-          <Card className="bg-muted">
+          <Card className="bg-muted/50">
             <CardContent className="p-6">
               <ResumePreview
                 personalInfo={personalInfo}
