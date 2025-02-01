@@ -1,30 +1,19 @@
+"use client";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import type React from "react";
+import { useResumeStore } from "@/lib/store";
+import type React from "react"; // Added import for React
 
-interface PersonalInfoFormProps {
-  personalInfo: {
-    name: string;
-    role: string;
-    email: string;
-    phone: string;
-    linkedin: string;
-    github: string;
-    bio: string;
-  };
-  setPersonalInfo: (info: any) => void;
-}
+export function PersonalInfoForm() {
+  const { personalInfo, updatePersonalInfo } = useResumeStore();
 
-export function PersonalInfoForm({
-  personalInfo,
-  setPersonalInfo,
-}: PersonalInfoFormProps) {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setPersonalInfo((prev: any) => ({ ...prev, [name]: value }));
+    updatePersonalInfo({ ...personalInfo, [name]: value });
   };
 
   return (

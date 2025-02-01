@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,35 +11,25 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResumePreview } from "@/components/molecules/resume-preview";
 import { ThemeToggle } from "@/components/molecules/theme-toggle";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { FileText, Download } from "lucide-react";
-
-interface WorkExperience {
-  company: string;
-  role: string;
-  duration: string;
-  description: string;
-}
-
-interface Education {
-  school: string;
-  degree: string;
-  year: string;
-}
+import { FileText, Download, RotateCcw } from "lucide-react";
+import { useState } from "react";
+import { useResumeStore } from "@/lib/store";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function ResumePage() {
-  const [personalInfo, setPersonalInfo] = useState({
-    name: "",
-    role: "",
-    email: "",
-    phone: "",
-    linkedin: "",
-    github: "",
-    bio: "",
-  });
-  const [workExperiences, setWorkExperiences] = useState<WorkExperience[]>([]);
-  const [skills, setSkills] = useState<string[]>([]);
-  const [education, setEducation] = useState<Education[]>([]);
   const [isPdfPreviewOpen, setIsPdfPreviewOpen] = useState(false);
+  const { personalInfo, workExperiences, skills, education, resetStore } =
+    useResumeStore();
 
   const resumePDF = (
     <ResumePDF
@@ -60,7 +49,31 @@ export default function ResumePage() {
             Create an ATS-friendly resume in minutes
           </p>
         </div>
-        <ThemeToggle />
+        <div className="flex items-center gap-2">
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="outline" size="icon">
+                <RotateCcw className="h-4 w-4" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Reset all data?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  your resume data and reset to default values.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={resetStore}>
+                  Reset
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+          <ThemeToggle />
+        </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -74,32 +87,21 @@ export default function ResumePage() {
             <TabsContent value="personal">
               <Card>
                 <CardContent className="pt-6">
-                  <PersonalInfoForm
-                    personalInfo={personalInfo}
-                    setPersonalInfo={setPersonalInfo}
-                  />
+                  <PersonalInfoForm />
                 </CardContent>
               </Card>
             </TabsContent>
             <TabsContent value="experience">
               <Card>
                 <CardContent className="pt-6">
-                  <WorkExperienceForm
-                    workExperiences={workExperiences}
-                    setWorkExperiences={setWorkExperiences}
-                  />
+                  <WorkExperienceForm />
                 </CardContent>
               </Card>
             </TabsContent>
             <TabsContent value="skills">
               <Card>
                 <CardContent className="pt-6">
-                  <SkillsEducationForm
-                    skills={skills}
-                    setSkills={setSkills}
-                    education={education}
-                    setEducation={setEducation}
-                  />
+                  <SkillsEducationForm />
                 </CardContent>
               </Card>
             </TabsContent>

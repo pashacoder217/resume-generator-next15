@@ -1,50 +1,36 @@
+"use client";
+
 import { PlusCircle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
+import { useResumeStore } from "@/lib/store";
 
-interface Education {
-  school: string;
-  degree: string;
-  year: string;
-}
-
-interface SkillsEducationFormProps {
-  skills: string[];
-  setSkills: (skills: string[]) => void;
-  education: Education[];
-  setEducation: (education: Education[]) => void;
-}
-
-export function SkillsEducationForm({
-  skills,
-  setSkills,
-  education,
-  setEducation,
-}: SkillsEducationFormProps) {
+export function SkillsEducationForm() {
+  const { skills, education, updateSkills, updateEducation } = useResumeStore();
   const [newSkill, setNewSkill] = useState("");
 
   const addSkill = (e: React.FormEvent) => {
     e.preventDefault();
     if (newSkill.trim() && !skills.includes(newSkill.trim())) {
-      setSkills([...skills, newSkill.trim()]);
+      updateSkills([...skills, newSkill.trim()]);
       setNewSkill("");
     }
   };
 
   const removeSkill = (skillToRemove: string) => {
-    setSkills(skills.filter((skill) => skill !== skillToRemove));
+    updateSkills(skills.filter((skill) => skill !== skillToRemove));
   };
 
   const addEducation = () => {
-    setEducation([...education, { school: "", degree: "", year: "" }]);
+    updateEducation([...education, { school: "", degree: "", year: "" }]);
   };
 
-  const updateEducation = (
+  const updateEducationItem = (
     index: number,
-    field: keyof Education,
+    field: keyof (typeof education)[0],
     value: string
   ) => {
     const updatedEducation = education.map((edu, i) => {
@@ -53,11 +39,11 @@ export function SkillsEducationForm({
       }
       return edu;
     });
-    setEducation(updatedEducation);
+    updateEducation(updatedEducation);
   };
 
   const removeEducation = (index: number) => {
-    setEducation(education.filter((_, i) => i !== index));
+    updateEducation(education.filter((_, i) => i !== index));
   };
 
   return (
@@ -111,7 +97,7 @@ export function SkillsEducationForm({
                   id={`school-${index}`}
                   value={edu.school}
                   onChange={(e) =>
-                    updateEducation(index, "school", e.target.value)
+                    updateEducationItem(index, "school", e.target.value)
                   }
                   placeholder="University name"
                 />
@@ -122,7 +108,7 @@ export function SkillsEducationForm({
                   id={`degree-${index}`}
                   value={edu.degree}
                   onChange={(e) =>
-                    updateEducation(index, "degree", e.target.value)
+                    updateEducationItem(index, "degree", e.target.value)
                   }
                   placeholder="Degree name"
                 />
@@ -134,7 +120,9 @@ export function SkillsEducationForm({
               <Input
                 id={`year-${index}`}
                 value={edu.year}
-                onChange={(e) => updateEducation(index, "year", e.target.value)}
+                onChange={(e) =>
+                  updateEducationItem(index, "year", e.target.value)
+                }
                 placeholder="2020"
               />
             </div>

@@ -1,39 +1,29 @@
+"use client";
+
 import { PlusCircle, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useResumeStore } from "@/lib/store";
 
-interface WorkExperience {
-  company: string;
-  role: string;
-  duration: string;
-  description: string;
-}
+export function WorkExperienceForm() {
+  const { workExperiences, updateWorkExperiences } = useResumeStore();
 
-interface WorkExperienceFormProps {
-  workExperiences: WorkExperience[];
-  setWorkExperiences: (experiences: WorkExperience[]) => void;
-}
-
-export function WorkExperienceForm({
-  workExperiences,
-  setWorkExperiences,
-}: WorkExperienceFormProps) {
   const addExperience = () => {
-    setWorkExperiences([
+    updateWorkExperiences([
       ...workExperiences,
       { company: "", role: "", duration: "", description: "" },
     ]);
   };
 
   const removeExperience = (index: number) => {
-    setWorkExperiences(workExperiences.filter((_, i) => i !== index));
+    updateWorkExperiences(workExperiences.filter((_, i) => i !== index));
   };
 
   const updateExperience = (
     index: number,
-    field: keyof WorkExperience,
+    field: keyof (typeof workExperiences)[0],
     value: string
   ) => {
     const updatedExperiences = workExperiences.map((exp, i) => {
@@ -42,7 +32,7 @@ export function WorkExperienceForm({
       }
       return exp;
     });
-    setWorkExperiences(updatedExperiences);
+    updateWorkExperiences(updatedExperiences);
   };
 
   return (
