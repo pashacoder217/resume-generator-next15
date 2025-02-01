@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { PersonalInfoForm } from "@/components/molecules/personal-info-form";
 import { WorkExperienceForm } from "@/components/molecules/work-experience-form";
 import { SkillsEducationForm } from "@/components/molecules/skills-education-form";
-import { ResumePDF } from "@/components/molecules/resume-pdf";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResumePreview } from "@/components/molecules/resume-preview";
 import { ThemeToggle } from "@/components/molecules/theme-toggle";
@@ -27,13 +26,23 @@ import {
 } from "@/components/ui/alert-dialog";
 import dynamic from "next/dynamic";
 
+// Dynamically import PDF components
 const PDFDownloadLink = dynamic(
-  async () => await import("@/components/lib/react-pdf-link"),
+  () => import("@react-pdf/renderer").then((mod) => mod.PDFDownloadLink),
   { ssr: false }
 );
+
 const PDFViewer = dynamic(
-  async () => await import("@/components/lib/react-pdf-viewer"),
+  () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
   { ssr: false }
+);
+
+const ResumePDF = dynamic(
+  () =>
+    import("@/components/molecules/resume-pdf").then((mod) => mod.ResumePDF),
+  {
+    ssr: false,
+  }
 );
 
 export default function ResumePage() {

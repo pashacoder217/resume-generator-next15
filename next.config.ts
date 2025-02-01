@@ -1,7 +1,15 @@
-import type { NextConfig } from "next";
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  webpack: (config: {
+    resolve: { alias: { canvas: boolean; encoding: boolean } };
+  }) => {
+    // Handle PDF renderer
+    config.resolve.alias.canvas = false;
+    config.resolve.alias.encoding = false;
 
-const nextConfig: NextConfig = {
-  /* config options here */
+    return config;
+  },
+  transpilePackages: ["@react-pdf/renderer"],
 };
 
 export default nextConfig;
