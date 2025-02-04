@@ -25,6 +25,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import dynamic from "next/dynamic";
+import { ResumePDF } from "@/components/molecules/resume-pdf";
 
 // Dynamically import PDF components
 const PDFDownloadLink = dynamic(
@@ -35,14 +36,6 @@ const PDFDownloadLink = dynamic(
 const PDFViewer = dynamic(
   () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
   { ssr: false }
-);
-
-const ResumePDF = dynamic(
-  () =>
-    import("@/components/molecules/resume-pdf").then((mod) => mod.ResumePDF),
-  {
-    ssr: false,
-  }
 );
 
 export default function ResumePage() {
