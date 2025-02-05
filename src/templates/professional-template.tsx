@@ -31,8 +31,8 @@ export function ProfessionalTemplate({
   education,
 }: Readonly<ResumeTemplateProps>) {
   return (
-    <div className="prose prose-sm max-w-none dark:prose-invert">
-      <div className="border-b pb-4 text-center">
+    <div className="prose prose-sm max-w-none dark:prose-invert space-y-6">
+      <div className="text-center">
         <h1 className="mb-2 text-3xl font-bold tracking-tight">
           {personalInfo.name || "Your Name"}
         </h1>
@@ -40,16 +40,16 @@ export function ProfessionalTemplate({
           {personalInfo.role || "Your Role"}
         </p>
         <div className="mt-2 flex flex-wrap justify-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
-          {personalInfo.email && <p>{personalInfo.email}</p>}
-          {personalInfo.phone && <p>{personalInfo.phone}</p>}
-          {personalInfo.linkedin && <p>{personalInfo.linkedin}</p>}
-          {personalInfo.github && <p>{personalInfo.github}</p>}
+          {personalInfo.email && <p> {personalInfo.email} | </p>}
+          {personalInfo.phone && <p> {personalInfo.phone} | </p>}
+          {personalInfo.linkedin && <p> {personalInfo.linkedin} | </p>}
+          {personalInfo.github && <p> {personalInfo.github} | </p>}
         </div>
       </div>
 
       {personalInfo.bio && (
-        <div className="my-6">
-          <h2 className="mb-4 text-lg font-bold uppercase tracking-wider text-primary">
+        <div className="mb-1">
+          <h2 className="mb-1 text-lg font-bold capitalize tracking-wider text-primary">
             Professional Summary
           </h2>
           <p className="text-muted-foreground">{parse(personalInfo.bio)}</p>
@@ -57,11 +57,11 @@ export function ProfessionalTemplate({
       )}
 
       {workExperiences.length > 0 && (
-        <div className="my-6">
-          <h2 className="mb-4 text-lg font-bold uppercase tracking-wider text-primary">
+        <div className="space-y-4">
+          <h2 className="mb-4 text-lg font-bold capitalize tracking-wider text-primary">
             Professional Experience
           </h2>
-          <div className="space-y-6">
+          <div className="space-y-4">
             {workExperiences.map((exp, index) => (
               <div key={index}>
                 <div className="flex flex-wrap items-center justify-between gap-2">
@@ -79,8 +79,8 @@ export function ProfessionalTemplate({
       )}
 
       {skills.length > 0 && (
-        <div className="my-6">
-          <h2 className="mb-4 text-lg font-bold uppercase tracking-wider text-primary">
+        <div className="space-y-4">
+          <h2 className="mb-4 text-lg font-bold capitalize tracking-wider text-primary">
             Technical Skills
           </h2>
           <p className="text-muted-foreground">{skills.join(" • ")}</p>
@@ -88,8 +88,8 @@ export function ProfessionalTemplate({
       )}
 
       {education.length > 0 && (
-        <div className="my-6">
-          <h2 className="mb-4 text-lg font-bold uppercase tracking-wider text-primary">
+        <div className="space-y-4">
+          <h2 className="mb-4 text-lg font-bold capitalize tracking-wider text-primary">
             Education
           </h2>
           <div className="space-y-4">

@@ -32,7 +32,7 @@ export function ModernTemplate({
   education,
 }: Readonly<ResumeTemplateProps>) {
   return (
-    <div className="prose prose-sm max-w-none dark:prose-invert">
+    <div className="no-prose space-y-6 prose-sm max-w-none dark:prose-invert">
       <div className="mb-8">
         <h1 className="mb-2 text-3xl font-bold">
           {personalInfo.name || "Your Name"}
@@ -49,10 +49,8 @@ export function ModernTemplate({
       </div>
 
       {personalInfo.bio && (
-        <div className="mb-8">
-          <h2 className="border-b text-xl font-semibold">
-            Professional Summary
-          </h2>
+        <div className="mb-8 space-y-4">
+          <h2 className="text-xl font-semibold">Professional Summary</h2>
           <p className="mt-3 text-muted-foreground">
             {parse(personalInfo.bio)}
           </p>
@@ -60,8 +58,8 @@ export function ModernTemplate({
       )}
 
       {workExperiences.length > 0 && (
-        <div className="mb-8">
-          <h2 className="border-b text-xl font-semibold">Work Experience</h2>
+        <div className="mb-8 space-y-4">
+          <h2 className="text-xl font-semibold">Work Experience</h2>
           <div className="mt-3 space-y-6">
             {workExperiences.map((exp, index) => (
               <div key={index}>
@@ -76,8 +74,8 @@ export function ModernTemplate({
       )}
 
       {skills.length > 0 && (
-        <div className="mb-8">
-          <h2 className="border-b text-xl font-semibold">Skills</h2>
+        <div className="mb-8 space-y-4">
+          <h2 className="text-xl font-semibold">Skills</h2>
           <div className="mt-3 flex flex-wrap gap-2">
             {skills.map((skill, index) => (
               <Badge key={index} variant="secondary">
@@ -89,8 +87,8 @@ export function ModernTemplate({
       )}
 
       {education.length > 0 && (
-        <div className="mb-8">
-          <h2 className="border-b text-xl font-semibold">Education</h2>
+        <div className="mb-8 space-y-4">
+          <h2 className="text-xl font-semibold">Education</h2>
           <div className="mt-3 space-y-4">
             {education.map((edu, index) => (
               <div key={index}>

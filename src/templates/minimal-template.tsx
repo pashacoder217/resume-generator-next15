@@ -31,7 +31,7 @@ export function MinimalTemplate({
   education,
 }: Readonly<ResumeTemplateProps>) {
   return (
-    <div className="prose prose-sm max-w-none space-y-6 dark:prose-invert">
+    <div className="prose space-y-6 prose-sm max-w-none dark:prose-invert">
       <div>
         <h1 className="mb-2 text-3xl font-bold">
           {personalInfo.name || "Your Name"}
