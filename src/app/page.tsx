@@ -10,7 +10,7 @@ import { ResumePreview } from "@/components/molecules/resume-preview";
 import { ThemeToggle } from "@/components/molecules/theme-toggle";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { FileText, Download, RotateCcw } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useResumeStore } from "@/lib/store";
 import { TemplateSelector } from "@/components/molecules/template-selector";
 import {
@@ -24,13 +24,39 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { ResumePDF } from "@/components/molecules/resume-pdf";
-import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 export default function ResumePage() {
+  const resumeRef = useRef<HTMLDivElement>(null);
+
   const [isPdfPreviewOpen, setIsPdfPreviewOpen] = useState(false);
   const { personalInfo, workExperiences, skills, education, resetStore } =
     useResumeStore();
+
+  const handlePrint = () => {
+    setIsPdfPreviewOpen(!isPdfPreviewOpen);
+  };
+
+  const handleDownload = async () => {
+    if (!resumeRef.current) return;
+
+    const canvas = await html2canvas(resumeRef.current, { scale: 2 });
+    const imgData = canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
+    });
+
+    const pdfWidth = 210;
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+
+    pdf.save("resume.pdf");
+  };
 
   return (
     <main className="container mx-auto py-6 px-4 md:px-6">
@@ -114,37 +140,22 @@ export default function ResumePage() {
           </Tabs>
 
           <div className="flex justify-center gap-4">
-            <Button variant="outline" onClick={() => setIsPdfPreviewOpen(true)}>
+            <Button variant="outline" onClick={() => handlePrint()}>
               <FileText className="mr-2 h-4 w-4" />
               Preview PDF
             </Button>
 
-            <PDFDownloadLink
-              document={
-                <ResumePDF
-                  personalInfo={personalInfo}
-                  workExperiences={workExperiences}
-                  skills={skills}
-                  education={education}
-                />
-              }
-              fileName={`${personalInfo?.name
-                .toLowerCase()
-                .replace(/\s+/g, "-")}-resume.pdf`}
-            >
-              {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-              {/* @ts-expect-error */}
-              {({ loading }) => (
-                <Button disabled={loading}>
-                  <Download className="mr-2 h-4 w-4" />
-                  {loading ? "Generating PDF..." : "Download Resume"}
-                </Button>
-              )}
-            </PDFDownloadLink>
+            <Button onClick={handleDownload}>
+              <Download className="mr-2 h-4 w-4" />
+              Download Resume
+            </Button>
           </div>
         </div>
 
-        <div className="lg:sticky lg:top-6 lg:h-[calc(100vh-8rem)] lg:overflow-auto">
+        <div
+          ref={resumeRef}
+          className="lg:sticky lg:top-6 lg:h-[calc(100vh-8rem)] lg:overflow-auto"
+        >
           <Card className="bg-muted/50">
             <CardContent className="p-6">
               <ResumePreview
@@ -159,15 +170,15 @@ export default function ResumePage() {
       </div>
 
       <Dialog open={isPdfPreviewOpen} onOpenChange={setIsPdfPreviewOpen}>
-        <DialogContent className="max-w-screen-lg h-[800px]">
-          <PDFViewer width="100%" height="100%" className="rounded-lg">
-            <ResumePDF
+        <DialogContent className="max-w-screen-lg h-[90vh] overflow-auto">
+          <div className="p-6 bg-white">
+            <ResumePreview
               personalInfo={personalInfo}
               workExperiences={workExperiences}
               skills={skills}
               education={education}
             />
-          </PDFViewer>
+          </div>
         </DialogContent>
       </Dialog>
     </main>
