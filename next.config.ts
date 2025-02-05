@@ -9,7 +9,7 @@ const nextConfig = {
 
     return config;
   },
-  transpilePackages: ["@react-pdf/renderer"],
+  swcMinify: false,
 };
 
 export default nextConfig;

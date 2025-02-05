@@ -1,3 +1,5 @@
+"use client";
+
 import { ModernTemplate } from "@/templates/modern-template";
 import { ProfessionalTemplate } from "@/templates/professional-template";
 import { MinimalTemplate } from "@/templates/minimal-template";
@@ -27,7 +29,7 @@ interface ResumePreviewProps {
   }[];
 }
 
-export function ResumePreview(props: ResumePreviewProps) {
+export function ResumePreview(props: Readonly<ResumePreviewProps>) {
   const selectedTemplate = useResumeStore((state) => state.selectedTemplate);
 
   const templates = {

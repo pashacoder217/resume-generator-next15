@@ -1,3 +1,5 @@
+"use client";
+
 import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 import { useResumeStore } from "@/lib/store";
 
@@ -29,13 +31,16 @@ interface ResumeProps {
 const htmlToText = (html: string) => {
   // Remove HTML tags but preserve line breaks
   const text = html
-    .replace(/<p>/g, "")
-    .replace(/<\/p>/g, "\n")
-    .replace(/<br\s*\/?>/g, "\n")
-    .replace(/<li>/g, "• ")
-    .replace(/<\/li>/g, "\n")
-    .replace(/<[^>]*>/g, "")
-    .replace(/&nbsp;/g, " ")
+    .replaceAll(/<p>/g, "")
+    .replaceAll(/<\/p>/g, "\n")
+    .replaceAll(/<br\s*\/?>/g, "\n")
+    .replaceAll(/<li>/g, "• ")
+    .replaceAll(/<\/li>/g, "\n")
+    .replaceAll(/<[^>]*>/g, "")
+    .replaceAll(/&nbsp;/g, " ")
+    .replaceAll(/&nbsp;/g, " ")
+    .replaceAll(/<strong>/g, " ")
+    .replaceAll(/<\/strong>/g, " ")
     .trim();
 
   return text;

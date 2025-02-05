@@ -1,3 +1,5 @@
+import parse from "html-react-parser";
+
 interface ResumeTemplateProps {
   personalInfo: {
     name: string;
@@ -27,11 +29,11 @@ export function MinimalTemplate({
   workExperiences,
   skills,
   education,
-}: ResumeTemplateProps) {
+}: Readonly<ResumeTemplateProps>) {
   return (
     <div className="prose prose-sm max-w-none space-y-6 dark:prose-invert">
       <div>
-        <h1 className="mb-1 text-2xl font-bold">
+        <h1 className="mb-2 text-3xl font-bold">
           {personalInfo.name || "Your Name"}
         </h1>
         <p className="text-lg text-primary">
@@ -51,7 +53,7 @@ export function MinimalTemplate({
 
       {personalInfo.bio && (
         <div>
-          <p className="text-sm">{personalInfo.bio}</p>
+          <p className="text-sm">{parse(personalInfo.bio)}</p>
         </div>
       )}
 
@@ -68,7 +70,7 @@ export function MinimalTemplate({
                   </p>
                 </div>
                 <p className="text-sm text-primary">{exp.company}</p>
-                <p className="mt-1 text-sm">{exp.description}</p>
+                <p className="mt-1 text-sm">{parse(exp.description)}</p>
               </div>
             ))}
           </div>

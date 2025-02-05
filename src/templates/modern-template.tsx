@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import parse from "html-react-parser";
 
 interface ResumeTemplateProps {
   personalInfo: {
@@ -29,7 +30,7 @@ export function ModernTemplate({
   workExperiences,
   skills,
   education,
-}: ResumeTemplateProps) {
+}: Readonly<ResumeTemplateProps>) {
   return (
     <div className="prose prose-sm max-w-none dark:prose-invert">
       <div className="mb-8">
@@ -52,7 +53,9 @@ export function ModernTemplate({
           <h2 className="border-b text-xl font-semibold">
             Professional Summary
           </h2>
-          <p className="mt-3 text-muted-foreground">{personalInfo.bio}</p>
+          <p className="mt-3 text-muted-foreground">
+            {parse(personalInfo.bio)}
+          </p>
         </div>
       )}
 
@@ -65,7 +68,7 @@ export function ModernTemplate({
                 <h3 className="font-semibold">{exp.company}</h3>
                 <p className="text-muted-foreground">{exp.role}</p>
                 <p className="text-sm text-muted-foreground">{exp.duration}</p>
-                <p className="mt-2 text-sm">{exp.description}</p>
+                <p className="mt-2 text-sm">{parse(exp.description)}</p>
               </div>
             ))}
           </div>

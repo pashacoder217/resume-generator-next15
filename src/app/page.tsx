@@ -24,33 +24,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import dynamic from "next/dynamic";
 import { ResumePDF } from "@/components/molecules/resume-pdf";
-
-// Dynamically import PDF components
-const PDFDownloadLink = dynamic(
-  () => import("@react-pdf/renderer").then((mod) => mod.PDFDownloadLink),
-  { ssr: false }
-);
-
-const PDFViewer = dynamic(
-  () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
-  { ssr: false }
-);
+import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 
 export default function ResumePage() {
   const [isPdfPreviewOpen, setIsPdfPreviewOpen] = useState(false);
   const { personalInfo, workExperiences, skills, education, resetStore } =
     useResumeStore();
-
-  const resumePDF = (
-    <ResumePDF
-      personalInfo={personalInfo}
-      workExperiences={workExperiences}
-      skills={skills}
-      education={education}
-    />
-  );
 
   return (
     <main className="container mx-auto py-6 px-4 md:px-6">
@@ -139,23 +119,28 @@ export default function ResumePage() {
               Preview PDF
             </Button>
 
-            {typeof window !== "undefined" && (
-              <PDFDownloadLink
-                document={resumePDF}
-                fileName={`${personalInfo.name
-                  .toLowerCase()
-                  .replace(/\s+/g, "-")}-resume.pdf`}
-              >
-                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                {/* @ts-expect-error */}
-                {({ loading }) => (
-                  <Button disabled={loading}>
-                    <Download className="mr-2 h-4 w-4" />
-                    {loading ? "Generating PDF..." : "Download Resume"}
-                  </Button>
-                )}
-              </PDFDownloadLink>
-            )}
+            <PDFDownloadLink
+              document={
+                <ResumePDF
+                  personalInfo={personalInfo}
+                  workExperiences={workExperiences}
+                  skills={skills}
+                  education={education}
+                />
+              }
+              fileName={`${personalInfo?.name
+                .toLowerCase()
+                .replace(/\s+/g, "-")}-resume.pdf`}
+            >
+              {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+              {/* @ts-expect-error */}
+              {({ loading }) => (
+                <Button disabled={loading}>
+                  <Download className="mr-2 h-4 w-4" />
+                  {loading ? "Generating PDF..." : "Download Resume"}
+                </Button>
+              )}
+            </PDFDownloadLink>
           </div>
         </div>
 
@@ -175,11 +160,14 @@ export default function ResumePage() {
 
       <Dialog open={isPdfPreviewOpen} onOpenChange={setIsPdfPreviewOpen}>
         <DialogContent className="max-w-screen-lg h-[800px]">
-          {typeof window !== "undefined" && (
-            <PDFViewer width="100%" height="100%" className="rounded-lg">
-              {resumePDF}
-            </PDFViewer>
-          )}
+          <PDFViewer width="100%" height="100%" className="rounded-lg">
+            <ResumePDF
+              personalInfo={personalInfo}
+              workExperiences={workExperiences}
+              skills={skills}
+              education={education}
+            />
+          </PDFViewer>
         </DialogContent>
       </Dialog>
     </main>

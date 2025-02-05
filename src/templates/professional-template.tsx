@@ -1,3 +1,5 @@
+import parse from "html-react-parser";
+
 interface ResumeTemplateProps {
   personalInfo: {
     name: string;
@@ -27,7 +29,7 @@ export function ProfessionalTemplate({
   workExperiences,
   skills,
   education,
-}: ResumeTemplateProps) {
+}: Readonly<ResumeTemplateProps>) {
   return (
     <div className="prose prose-sm max-w-none dark:prose-invert">
       <div className="border-b pb-4 text-center">
@@ -50,7 +52,7 @@ export function ProfessionalTemplate({
           <h2 className="mb-4 text-lg font-bold uppercase tracking-wider text-primary">
             Professional Summary
           </h2>
-          <p className="text-muted-foreground">{personalInfo.bio}</p>
+          <p className="text-muted-foreground">{parse(personalInfo.bio)}</p>
         </div>
       )}
 
@@ -69,7 +71,7 @@ export function ProfessionalTemplate({
                   </p>
                 </div>
                 <p className="font-medium text-primary">{exp.role}</p>
-                <p className="mt-2 text-sm">{exp.description}</p>
+                <p className="mt-2 text-sm">{parse(exp.description)}</p>
               </div>
             ))}
           </div>
