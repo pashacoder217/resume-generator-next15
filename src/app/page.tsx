@@ -41,21 +41,36 @@ export default function ResumePage() {
   const handleDownload = async () => {
     if (!resumeRef.current) return;
 
-    const canvas = await html2canvas(resumeRef.current, { scale: 2 });
-    const imgData = canvas.toDataURL("image/png");
+    const element = resumeRef.current;
 
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
-      format: "a4",
+    // Capture full content, including overflow
+    const canvas = await html2canvas(element, {
+      scale: 2, // Higher scale for better quality
+      useCORS: true, // Enable CORS if images are loaded
+      windowWidth: element.scrollWidth, // Capture full width
+      windowHeight: element.scrollHeight, // Capture full height
     });
 
-    const pdfWidth = 210;
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    const imgData = canvas.toDataURL("image/png");
 
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    // Initialize jsPDF
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pageWidth = 210; // A4 width in mm
+    const pageHeight = 297; // A4 height in mm
+    const imgWidth = pageWidth;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    pdf.save("resume.pdf");
+    let yPosition = 0;
+    let remainingHeight = imgHeight;
+
+    while (remainingHeight > 0) {
+      pdf.addImage(imgData, "PNG", 0, yPosition, imgWidth, imgHeight);
+      remainingHeight -= pageHeight;
+      if (remainingHeight > 0) pdf.addPage();
+      yPosition -= pageHeight;
+    }
+
+    pdf.save("download.pdf");
   };
 
   return (

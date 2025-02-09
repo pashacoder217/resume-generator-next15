@@ -52,7 +52,9 @@ export function ProfessionalTemplate({
           <h2 className="mb-1 text-lg font-bold capitalize tracking-wider text-primary">
             Professional Summary
           </h2>
-          <p className="text-muted-foreground">{parse(personalInfo.bio)}</p>
+          <p className="text-muted-foreground text-sm">
+            {parse(personalInfo.bio)}
+          </p>
         </div>
       )}
 

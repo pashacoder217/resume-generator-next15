@@ -51,7 +51,7 @@ export function ModernTemplate({
       {personalInfo.bio && (
         <div className="mb-8 space-y-4">
           <h2 className="text-xl font-semibold">Professional Summary</h2>
-          <p className="mt-3 text-muted-foreground">
+          <p className="mt-3 text-muted-foreground text-sm">
             {parse(personalInfo.bio)}
           </p>
         </div>
